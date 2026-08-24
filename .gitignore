@@ -1,0 +1,19 @@
+# Built binaries and fetched daemons
+/bin/
+*.exe
+*.test
+*.out
+
+# Wallet / Neutrino runtime data
+*.db
+*.bin
+*.log
+neutrino.db
+block_headers.bin
+reg_filter_headers.bin
+
+# Editor and OS noise
+.idea/
+.vscode/
+.DS_Store
+*.swp
