@@ -1,5 +1,6 @@
 # Built binaries and fetched daemons
 /bin/
+.harness-spv/
 *.exe
 *.test
 *.out
