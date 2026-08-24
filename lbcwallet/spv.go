@@ -13,14 +13,13 @@ import (
 	"github.com/lbc-spv/neutrino"
 )
 
-// spvConnectLoop starts Neutrino and attaches it to the loaded wallet. Unlike
-// the RPC loop it does not reconnect to a full node; P2P reconnect is inside
-// Neutrino.
-func spvConnectLoop(legacyRPCServer *legacyrpc.Server, loader *wallet.Loader) {
+// startSPV starts Neutrino and registers a hook so the wallet attaches as
+// soon as it is opened. Unlike the RPC loop this is synchronous so we cannot
+// miss RunAfterLoad.
+func startSPV(legacyRPCServer *legacyrpc.Server, loader *wallet.Loader) error {
 	chainClient, err := startNeutrino()
 	if err != nil {
-		log.Errorf("Unable to start SPV chain service: %v", err)
-		return
+		return err
 	}
 
 	loader.RunAfterLoad(func(w *wallet.Wallet) {
@@ -32,8 +31,7 @@ func spvConnectLoop(legacyRPCServer *legacyrpc.Server, loader *wallet.Loader) {
 	})
 
 	if err := chainClient.Start(); err != nil {
-		log.Errorf("Unable to start Neutrino client: %v", err)
-		return
+		return fmt.Errorf("start Neutrino client: %w", err)
 	}
 
 	addInterruptHandler(func() {
@@ -43,6 +41,7 @@ func spvConnectLoop(legacyRPCServer *legacyrpc.Server, loader *wallet.Loader) {
 		}
 		chainClient.WaitForShutdown()
 	})
+	return nil
 }
 
 func startNeutrino() (*chain.NeutrinoClient, error) {

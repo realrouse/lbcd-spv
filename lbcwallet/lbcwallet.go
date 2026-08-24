@@ -82,7 +82,12 @@ func walletMain() error {
 	}
 
 	if cfg.SPV {
-		go spvConnectLoop(legacyRPCServer, loader)
+		// Must register the wallet hook before OpenExistingWallet, unlike
+		// the RPC loop which can race because connecting to a node is slow.
+		if err := startSPV(legacyRPCServer, loader); err != nil {
+			log.Errorf("Unable to start SPV chain service: %v", err)
+			return err
+		}
 	} else {
 		go rpcClientConnectLoop(legacyRPCServer, loader)
 	}

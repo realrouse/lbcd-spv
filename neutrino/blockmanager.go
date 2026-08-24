@@ -2415,8 +2415,8 @@ func (b *blockManager) handleHeadersMsg(hmsg *headersMsg) {
 			err := b.checkHeaderSanity(blockHeader, maxTimestamp,
 				false)
 			if err != nil {
-				log.Warnf("Header doesn't pass sanity check: "+
-					"%s -- disconnecting peer", err)
+				log.Warnf("Header at height %d doesn't pass sanity check: "+
+					"%s -- disconnecting peer", prevNode.Height+1, err)
 				hmsg.peer.Disconnect()
 				return
 			}
@@ -2782,12 +2782,18 @@ func (b *blockManager) calcNextRequiredDifficulty(newBlockTime time.Time,
 	}
 
 	// Get the block node at the previous retarget (targetTimespan days
-	// worth of blocks).
-	firstNode, err := b.cfg.BlockHeaders.FetchHeaderByHeight(
-		uint32(lastNode.Height + 1 - b.blocksPerRetarget),
-	)
-	if err != nil {
-		return 0, err
+	// worth of blocks). LBC retargets every block, so that is lastNode.
+	firstHeight := lastNode.Height + 1 - b.blocksPerRetarget
+	var firstNode *wire.BlockHeader
+	if firstHeight == lastNode.Height {
+		hdr := lastNode.Header
+		firstNode = &hdr
+	} else {
+		var err error
+		firstNode, err = b.cfg.BlockHeaders.FetchHeaderByHeight(uint32(firstHeight))
+		if err != nil {
+			return 0, fmt.Errorf("header at height %d: %w", firstHeight, err)
+		}
 	}
 
 	// Limit the amount of adjustment that can occur to the previous

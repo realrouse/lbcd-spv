@@ -50,6 +50,9 @@ NODE_P2P=127.0.0.1:29246
 NODE_RPC=127.0.0.1:29245
 ALPHA_WALLET_RPC=127.0.0.1:29244
 SPV_WALLET_RPC=127.0.0.1:29254
+NODE_PID=""
+ALPHA_WALLET_PID=""
+SPV_PID=""
 
 ctl() {
   if [[ -n "$LBCCTL_BIN" ]]; then
@@ -100,7 +103,7 @@ echo "Starting full node..."
 NODE_PID=$!
 
 cleanup() {
-  kill "$SPV_PID" "$ALPHA_WALLET_PID" "$NODE_PID" 2>/dev/null || true
+  kill ${SPV_PID:-} ${ALPHA_WALLET_PID:-} ${NODE_PID:-} 2>/dev/null || true
 }
 trap cleanup EXIT
 
@@ -125,15 +128,20 @@ ADDR="$(wallet_rpc "$ALPHA_WALLET_RPC" getnewaddress)"
 echo "Mining address $ADDR"
 ctl generatetoaddress 120 "$ADDR" >/dev/null
 echo "Node height $(ctl getblockcount)"
+echo "Waiting for alpha wallet to see mature coinbase..."
+for i in $(seq 1 60); do
+  ABAL="$(wallet_rpc "$ALPHA_WALLET_RPC" getbalance || echo 0)"
+  python3 -c "import sys; sys.exit(0 if float('$ABAL')>=10 else 1)" && break
+  sleep 0.5
+done
+echo "Alpha getbalance=$ABAL"
 
-echo "Creating SPV wallet..."
-"$LBCWALLET_BIN" --regtest --create -p abc --appdata="$WORKDIR/spv/wallet" >/dev/null
-"$LBCWALLET_BIN" --regtest --spv --noservertls --noclienttls \
+echo "Starting SPV wallet (createtemp + --spv, peers only)..."
+"$LBCWALLET_BIN" --createtemp --regtest --spv --noservertls --noclienttls \
   --appdata="$WORKDIR/spv/wallet" \
   --connect="$NODE_P2P" --nodnsseed \
   --rpcuser="$RPC_USER" --rpcpass="$RPC_PASS" \
   --rpclisten="$SPV_WALLET_RPC" \
-  -p abc \
   >"$WORKDIR/spv/wallet.log" 2>&1 &
 SPV_PID=$!
 
@@ -144,20 +152,22 @@ for i in $(seq 1 60); do
 done
 SPV_ADDR="$(wallet_rpc "$SPV_WALLET_RPC" getnewaddress)"
 echo "SPV receive address $SPV_ADDR"
+echo "Waiting for SPV header/filter sync..."
+sleep 5
 
-echo "Sending 25 LBC from alpha to SPV..."
-wallet_rpc "$ALPHA_WALLET_RPC" sendtoaddress "$SPV_ADDR" 25 >/dev/null
+echo "Sending 10 LBC from alpha to SPV..."
+wallet_rpc "$ALPHA_WALLET_RPC" sendtoaddress "$SPV_ADDR" 10 >/dev/null
 ctl generatetoaddress 1 "$ADDR" >/dev/null
 
 echo "Waiting for SPV balance..."
 BAL=0
 for i in $(seq 1 40); do
   BAL="$(wallet_rpc "$SPV_WALLET_RPC" getbalance || echo 0)"
-  python3 -c "import sys; sys.exit(0 if float('$BAL')>=25 else 1)" && break
+  python3 -c "import sys; sys.exit(0 if float('$BAL')>=10 else 1)" && break
   sleep 1
 done
 echo "SPV getbalance=$BAL"
-python3 -c "import sys; sys.exit(0 if float('$BAL')>=25 else 1)"
+python3 -c "import sys; sys.exit(0 if float('$BAL')>=10 else 1)"
 
 echo "Sending 1 LBC from SPV back to alpha..."
 wallet_rpc "$SPV_WALLET_RPC" sendtoaddress "$ADDR" 1 >/dev/null
