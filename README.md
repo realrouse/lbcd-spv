@@ -14,11 +14,18 @@ Think of two kinds of software:
 | What it can see | Every transaction on the network | Only payments that belong to this wallet |
 | Who needs it | DEX **server**, explorers, people serving light wallets | Traders, market makers, phones, small VPS wallets |
 
-This repo is the light wallet. It talks to the LBC peer-to-peer network, asks full nodes for **compact filters** (tiny summaries of each block), and only downloads a full block when a filter says “this block might contain your coins.”
+This repo is **only the light wallet**. It still needs **someone else** running a full node that serves compact filters. That node *is* the SPV “server.” We did not build a separate server binary.
 
-It does **not** replace a full node for a dcrdex **server**. The matching engine must watch *everyone’s* swap contracts, not just one wallet. Traders and Bison Wallet can use this light wallet later so they do not each run 100 GB of chain data.
+Who runs what:
 
-Any full node that speaks LBC P2P and serves compact filters works as a peer — lbryio builds, a future LBRY Foundation build, or a custom daemon. You point at it with `--connect=host:port`. The wallet does not care which GitHub org compiled the node.
+- **Neofutur / a dedicated box** → `lbcd` (full node, filters on). This is the server light wallets use.
+- **Traders / Bison Wallet / this repo** → `lbcwallet --spv`. Thin client. Points at that node with `--connect`.
+
+Many public LBC peers are still old `lbrycrd` and **do not** serve compact filters. Until the public network has plenty of `lbcd` nodes, **someone must keep at least one filter-serving node online** or SPV wallets cannot sync.
+
+It does **not** replace a full node for a dcrdex **server**. The matching engine must watch *everyone’s* swap contracts, not just one wallet.
+
+Any full node that speaks LBC P2P and serves compact filters works — lbryio builds, a future LBRY Foundation build, or a custom daemon. `--connect=host:port`. The wallet does not care which GitHub org compiled the node.
 
 ---
 
@@ -30,16 +37,18 @@ The dcrdex **server** still needs a full node. This software is for a later Biso
 
 ### If you are renting a dedicated server (copy this)
 
-A machine with **~500 GB SSD** and **16–64 GB RAM** is a good fit for a **full LBC node**, not for this light wallet (the light wallet barely needs that).
+**Yes — you are the SPV server.** That machine should run **`lbcd`**, not this light wallet.
 
-Run **`lbcd`** (full node) on that box, with compact filters left **on** (that is the default). Official lbcd asks for at least 8 GB RAM and 100 GB disk; 16 GB RAM and 500 GB NVMe is comfortable headroom for chain growth, indexes, and later a dcrdex server on the same host.
+A light wallet does not work by itself. It downloads headers and compact filters from a full node. Your **~500 GB SSD / 16–64 GB RAM** box is that full node. Compact filters are **on by default** in lbcd (do not pass `--nocfilters`).
+
+Official lbcd asks for at least 8 GB RAM and 100 GB disk. 16 GB RAM and 500 GB NVMe is comfortable for chain growth, indexes, serving light wallets, and later a dcrdex server on the same host.
 
 Then:
 
-1. Keep P2P port **9246** reachable (or firewalled to people you trust).
-2. Do **not** expose RPC (9245) to the internet. RPC stays on localhost.
-3. Light wallets (this repo) connect with `--connect=your.server:9246 --nodnsseed`.
-4. A future LBC dcrdex **server** on that same machine would use `lbcd` RPC locally. Traders would use this SPV wallet so they do not need 100 GB each.
+1. Keep P2P port **9246** reachable (this is what SPV clients connect to). Firewall it to people you trust if you do not want the whole internet.
+2. Do **not** expose RPC (9245) to the internet. RPC stays on localhost (dcrdex server / you).
+3. Light wallets connect with `--connect=your.server:9246 --nodnsseed`.
+4. One `lbcd` can serve many SPV wallets at once. Same box can later run the dcrdex **server** against local RPC.
 
 Binaries today: [lbryio/lbcd releases](https://github.com/lbryio/lbcd/releases). [LBRYFoundation/lbcd](https://github.com/LBRYFoundation/lbcd) is the likely future maintainer but does not publish binaries yet — same protocol either way.
 
