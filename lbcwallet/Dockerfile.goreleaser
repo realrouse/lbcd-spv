@@ -1,0 +1,9 @@
+FROM debian:bullseye-20220418-slim
+
+COPY lbcwallet /bin/
+
+VOLUME ["/root/.lbcwallet"]
+
+EXPOSE 9244
+
+ENTRYPOINT ["lbcwallet"]

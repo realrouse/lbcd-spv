@@ -1,0 +1,7 @@
+lbcwallet
+vendor
+.idea
+.vscode
+coverage.txt
+
+dist/
