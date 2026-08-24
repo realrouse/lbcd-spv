@@ -50,6 +50,8 @@ Then:
 3. Light wallets connect with `--connect=your.server:9246 --nodnsseed`.
 4. One `lbcd` can serve many SPV wallets at once. Same box can later run the dcrdex **server** against local RPC.
 
+**Step-by-step for that box:** [docs/RUN-A-FILTER-NODE.md](docs/RUN-A-FILTER-NODE.md).
+
 Binaries today: [lbryio/lbcd releases](https://github.com/lbryio/lbcd/releases). [LBRYFoundation/lbcd](https://github.com/LBRYFoundation/lbcd) is the likely future maintainer but does not publish binaries yet — same protocol either way.
 
 ## What you get
