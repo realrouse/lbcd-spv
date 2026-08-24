@@ -2,7 +2,7 @@
 
 There is no extra SPV-server program. **Install `lbcd`, leave compact filters on, open P2P, keep RPC private.** Light wallets (`lbcwallet --spv`) then connect to you on port **9246**.
 
-Hardware that is enough (official `lbcd` docs): **≥ 8 GB RAM, ≥ 100 GB disk**, fast SSD. A **500 GB NVMe + 16–64 GB RAM** box is comfortable.
+Hardware that is enough: **≥ 16GB RAM, ≥ 300 GB disk**, fast SSD. A **500 GB NVMe + 32–64 GB RAM** box is comfortable.
 
 ## 1. Get the binary
 
