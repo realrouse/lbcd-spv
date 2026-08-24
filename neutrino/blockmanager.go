@@ -19,12 +19,12 @@ import (
 	btcutil "github.com/lbryio/lbcutil"
 	"github.com/lbryio/lbcutil/gcs"
 	"github.com/lbryio/lbcutil/gcs/builder"
-	"github.com/lbc-spv/neutrino/banman"
-	"github.com/lbc-spv/neutrino/blockntfns"
-	"github.com/lbc-spv/neutrino/chainsync"
-	"github.com/lbc-spv/neutrino/headerfs"
-	"github.com/lbc-spv/neutrino/headerlist"
-	"github.com/lbc-spv/neutrino/query"
+	"github.com/realrouse/lbcd-spv/neutrino/banman"
+	"github.com/realrouse/lbcd-spv/neutrino/blockntfns"
+	"github.com/realrouse/lbcd-spv/neutrino/chainsync"
+	"github.com/realrouse/lbcd-spv/neutrino/headerfs"
+	"github.com/realrouse/lbcd-spv/neutrino/headerlist"
+	"github.com/realrouse/lbcd-spv/neutrino/query"
 )
 
 const (

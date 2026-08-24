@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/lbc-spv/neutrino/cache"
+	"github.com/realrouse/lbcd-spv/neutrino/cache"
 )
 
 func assertEqual(t *testing.T, a interface{}, b interface{}, message string) { // nolint:unparam

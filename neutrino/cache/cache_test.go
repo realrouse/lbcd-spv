@@ -8,9 +8,9 @@ import (
 	"github.com/lbryio/lbcd/wire"
 	btcutil "github.com/lbryio/lbcutil"
 	"github.com/lbryio/lbcutil/gcs"
-	"github.com/lbc-spv/neutrino/cache"
-	"github.com/lbc-spv/neutrino/cache/lru"
-	"github.com/lbc-spv/neutrino/filterdb"
+	"github.com/realrouse/lbcd-spv/neutrino/cache"
+	"github.com/realrouse/lbcd-spv/neutrino/cache/lru"
+	"github.com/realrouse/lbcd-spv/neutrino/filterdb"
 )
 
 // TestBlockFilterCaches tests that we can put and retrieve elements from all

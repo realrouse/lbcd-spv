@@ -19,8 +19,8 @@ import (
 	btcutil "github.com/lbryio/lbcutil"
 	"github.com/lbryio/lbcutil/gcs"
 	"github.com/lbryio/lbcutil/gcs/builder"
-	"github.com/lbc-spv/neutrino/blockntfns"
-	"github.com/lbc-spv/neutrino/headerfs"
+	"github.com/realrouse/lbcd-spv/neutrino/blockntfns"
+	"github.com/realrouse/lbcd-spv/neutrino/headerfs"
 )
 
 var (

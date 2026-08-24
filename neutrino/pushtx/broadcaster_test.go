@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/lbryio/lbcd/wire"
-	"github.com/lbc-spv/neutrino/blockntfns"
+	"github.com/realrouse/lbcd-spv/neutrino/blockntfns"
 )
 
 // createTx is a helper method to create random transactions that spend

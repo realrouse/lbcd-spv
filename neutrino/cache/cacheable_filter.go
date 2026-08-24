@@ -3,7 +3,7 @@ package cache
 import (
 	"github.com/lbryio/lbcd/chaincfg/chainhash"
 	"github.com/lbryio/lbcutil/gcs"
-	"github.com/lbc-spv/neutrino/filterdb"
+	"github.com/realrouse/lbcd-spv/neutrino/filterdb"
 )
 
 // FilterCacheKey represents the key used to access filters in the FilterCache.

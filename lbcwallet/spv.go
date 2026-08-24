@@ -10,7 +10,7 @@ import (
 	"github.com/lbryio/lbcwallet/chain"
 	"github.com/lbryio/lbcwallet/rpc/legacyrpc"
 	"github.com/lbryio/lbcwallet/wallet"
-	"github.com/lbc-spv/neutrino"
+	"github.com/realrouse/lbcd-spv/neutrino"
 )
 
 // startSPV starts Neutrino and registers a hook so the wallet attaches as

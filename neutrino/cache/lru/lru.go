@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/lbc-spv/neutrino/cache"
+	"github.com/realrouse/lbcd-spv/neutrino/cache"
 )
 
 // elementMap is an alias for a map from a generic interface to a list.Element.

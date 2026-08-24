@@ -6,7 +6,7 @@ import (
 	"github.com/lbryio/lbcd/blockchain"
 	"github.com/lbryio/lbcd/chaincfg/chainhash"
 	"github.com/lbryio/lbcd/wire"
-	"github.com/lbc-spv/neutrino/headerfs"
+	"github.com/realrouse/lbcd-spv/neutrino/headerfs"
 )
 
 // mockBlockHeaderStore is an implementation of the BlockHeaderStore backed by

@@ -1,4 +1,4 @@
-module github.com/lbc-spv/neutrino
+module github.com/realrouse/lbcd-spv/neutrino
 
 go 1.19
 

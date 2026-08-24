@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/lbryio/lbcd/wire"
-	"github.com/lbc-spv/neutrino/pushtx"
+	"github.com/realrouse/lbcd-spv/neutrino/pushtx"
 )
 
 // TestParseBroadcastErrorCode ensures that we properly construct a

@@ -13,9 +13,9 @@ import (
 	btcutil "github.com/lbryio/lbcutil"
 	"github.com/lbryio/lbcutil/gcs"
 	"github.com/lbryio/lbcutil/gcs/builder"
-	"github.com/lbc-spv/neutrino/cache"
-	"github.com/lbc-spv/neutrino/filterdb"
-	"github.com/lbc-spv/neutrino/pushtx"
+	"github.com/realrouse/lbcd-spv/neutrino/cache"
+	"github.com/realrouse/lbcd-spv/neutrino/filterdb"
+	"github.com/realrouse/lbcd-spv/neutrino/pushtx"
 )
 
 var (

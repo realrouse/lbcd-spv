@@ -21,13 +21,13 @@ import (
 	"github.com/lbryio/lbcd/wire"
 	btcutil "github.com/lbryio/lbcutil"
 	"github.com/btcsuite/btcwallet/walletdb"
-	"github.com/lbc-spv/neutrino/banman"
-	"github.com/lbc-spv/neutrino/blockntfns"
-	"github.com/lbc-spv/neutrino/cache/lru"
-	"github.com/lbc-spv/neutrino/filterdb"
-	"github.com/lbc-spv/neutrino/headerfs"
-	"github.com/lbc-spv/neutrino/pushtx"
-	"github.com/lbc-spv/neutrino/query"
+	"github.com/realrouse/lbcd-spv/neutrino/banman"
+	"github.com/realrouse/lbcd-spv/neutrino/blockntfns"
+	"github.com/realrouse/lbcd-spv/neutrino/cache/lru"
+	"github.com/realrouse/lbcd-spv/neutrino/filterdb"
+	"github.com/realrouse/lbcd-spv/neutrino/headerfs"
+	"github.com/realrouse/lbcd-spv/neutrino/pushtx"
+	"github.com/realrouse/lbcd-spv/neutrino/query"
 )
 
 // These are exported variables so they can be changed by users.

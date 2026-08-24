@@ -16,8 +16,8 @@ import (
 	"github.com/lbryio/lbcutil/gcs/builder"
 	"github.com/lbryio/lbcwallet/waddrmgr"
 	"github.com/lbryio/lbcwallet/wtxmgr"
-	"github.com/lbc-spv/neutrino"
-	"github.com/lbc-spv/neutrino/headerfs"
+	"github.com/realrouse/lbcd-spv/neutrino"
+	"github.com/realrouse/lbcd-spv/neutrino/headerfs"
 )
 
 // NeutrinoClient implements chain.Interface over a Neutrino ChainService.

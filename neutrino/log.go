@@ -7,9 +7,9 @@ import (
 	"github.com/lbryio/lbcd/peer"
 	"github.com/lbryio/lbcd/txscript"
 	"github.com/btcsuite/btclog"
-	"github.com/lbc-spv/neutrino/blockntfns"
-	"github.com/lbc-spv/neutrino/pushtx"
-	"github.com/lbc-spv/neutrino/query"
+	"github.com/realrouse/lbcd-spv/neutrino/blockntfns"
+	"github.com/realrouse/lbcd-spv/neutrino/pushtx"
+	"github.com/realrouse/lbcd-spv/neutrino/query"
 )
 
 // log is a logger that is initialized with no output filters.  This

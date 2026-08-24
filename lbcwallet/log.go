@@ -17,7 +17,7 @@ import (
 	"github.com/lbryio/lbcwallet/rpc/legacyrpc"
 	"github.com/lbryio/lbcwallet/wallet"
 	"github.com/lbryio/lbcwallet/wtxmgr"
-	"github.com/lbc-spv/neutrino"
+	"github.com/realrouse/lbcd-spv/neutrino"
 )
 
 // logWriter implements an io.Writer that outputs to both standard output and

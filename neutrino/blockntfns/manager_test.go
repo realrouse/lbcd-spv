@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/lbryio/lbcd/wire"
-	"github.com/lbc-spv/neutrino/blockntfns"
+	"github.com/realrouse/lbcd-spv/neutrino/blockntfns"
 )
 
 var emptyHeader wire.BlockHeader

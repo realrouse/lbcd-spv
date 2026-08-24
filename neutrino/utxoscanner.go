@@ -8,7 +8,7 @@ import (
 
 	"github.com/lbryio/lbcd/chaincfg/chainhash"
 	btcutil "github.com/lbryio/lbcutil"
-	"github.com/lbc-spv/neutrino/headerfs"
+	"github.com/realrouse/lbcd-spv/neutrino/headerfs"
 )
 
 // getUtxoResult is a simple pair type holding a spend report and error.

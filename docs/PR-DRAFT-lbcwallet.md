@@ -5,7 +5,7 @@
 
 **Do not file this until** the Neutrino module is importable as
 `github.com/realrouse/lbcd-spv/neutrino` (today the `go.mod` still says
-`github.com/lbc-spv/neutrino`, which `go get` cannot fetch).
+`github.com/realrouse/lbcd-spv/neutrino`, which `go get` cannot fetch).
 
 ---
 

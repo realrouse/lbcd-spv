@@ -7,7 +7,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/jrick/logrotate v1.0.0
-	github.com/lbc-spv/neutrino v0.0.0
+	github.com/realrouse/lbcd-spv/neutrino v0.0.0
 	github.com/lbryio/lbcd v0.22.118
 	github.com/lbryio/lbcutil v1.0.202
 	github.com/lightningnetwork/lnd/clock v1.1.0
@@ -55,6 +55,6 @@ require (
 // version.
 replace github.com/onsi/ginkgo => github.com/onsi/ginkgo v1.14.2
 
-replace github.com/lbc-spv/neutrino => ../neutrino
+replace github.com/realrouse/lbcd-spv/neutrino => ../neutrino
 
 go 1.19

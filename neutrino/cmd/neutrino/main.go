@@ -14,7 +14,7 @@ import (
 	"github.com/btcsuite/btcwallet/walletdb"
 	_ "github.com/btcsuite/btcwallet/walletdb/bdb"
 	"github.com/lbryio/lbcd/chaincfg"
-	"github.com/lbc-spv/neutrino"
+	"github.com/realrouse/lbcd-spv/neutrino"
 )
 
 func main() {

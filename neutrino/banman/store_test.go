@@ -10,7 +10,7 @@ import (
 
 	"github.com/btcsuite/btcwallet/walletdb"
 	_ "github.com/btcsuite/btcwallet/walletdb/bdb"
-	"github.com/lbc-spv/neutrino/banman"
+	"github.com/realrouse/lbcd-spv/neutrino/banman"
 )
 
 // createTestBanStore creates a test Store backed by a boltdb instance.

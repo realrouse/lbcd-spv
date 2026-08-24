@@ -11,7 +11,7 @@ import (
 
 	"github.com/lbryio/lbcd/addrmgr"
 	"github.com/lbryio/lbcd/connmgr"
-	"github.com/lbc-spv/neutrino/query"
+	"github.com/realrouse/lbcd-spv/neutrino/query"
 )
 
 type getConnCountMsg struct {
