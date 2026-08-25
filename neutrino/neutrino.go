@@ -225,9 +225,7 @@ func (sp *ServerPeer) OnVersion(_ *peer.Peer, msg *wire.MsgVersion) *wire.MsgRej
 	// service bits required to service us. If not, then we'll disconnect
 	// so we can find compatible peers.
 	peerServices := sp.Services()
-	if peerServices&wire.SFNodeWitness != wire.SFNodeWitness ||
-		peerServices&wire.SFNodeCF != wire.SFNodeCF {
-
+	if peerServices&RequiredServices != RequiredServices {
 		peerAddr := sp.Addr()
 		err := sp.server.BanPeer(peerAddr, banman.NoCompactFilters)
 		if err != nil {

@@ -2707,6 +2707,19 @@ func (b *blockManager) handleHeadersMsg(hmsg *headersMsg) {
 	b.newHeadersSignal.Broadcast()
 }
 
+// lbcAdjustedTimespan matches lbcd: damp the observed timespan toward the
+// target by 1/8, then clamp to [minSpan, maxSpan].
+func lbcAdjustedTimespan(actual, target, minSpan, maxSpan int64) int64 {
+	adjusted := target + (actual-target)/8
+	if adjusted < minSpan {
+		return minSpan
+	}
+	if adjusted > maxSpan {
+		return maxSpan
+	}
+	return adjusted
+}
+
 // checkHeaderSanity checks the PoW, and timestamp of a block header.
 func (b *blockManager) checkHeaderSanity(blockHeader *wire.BlockHeader,
 	maxTimestamp time.Time, reorgAttempt bool) error {
@@ -2797,15 +2810,14 @@ func (b *blockManager) calcNextRequiredDifficulty(newBlockTime time.Time,
 	}
 
 	// Limit the amount of adjustment that can occur to the previous
-	// difficulty.
+	// difficulty. LBC damps the timespan toward the target by 1/8, then
+	// clamps. Using the raw actual timespan (Bitcoin-style) makes the
+	// next bits too hard on fast blocks and we disconnect the only peer.
+	targetTimeSpan := int64(b.cfg.ChainParams.TargetTimespan / time.Second)
 	actualTimespan := lastNode.Header.Timestamp.Unix() -
 		firstNode.Timestamp.Unix()
-	adjustedTimespan := actualTimespan
-	if actualTimespan < b.minRetargetTimespan {
-		adjustedTimespan = b.minRetargetTimespan
-	} else if actualTimespan > b.maxRetargetTimespan {
-		adjustedTimespan = b.maxRetargetTimespan
-	}
+	adjustedTimespan := lbcAdjustedTimespan(actualTimespan, targetTimeSpan,
+		b.minRetargetTimespan, b.maxRetargetTimespan)
 
 	// Calculate new target difficulty as:
 	//  currentDifficulty * (adjustedTimespan / targetTimespan)
@@ -2814,8 +2826,6 @@ func (b *blockManager) calcNextRequiredDifficulty(newBlockTime time.Time,
 	// result.
 	oldTarget := blockchain.CompactToBig(lastNode.Header.Bits)
 	newTarget := new(big.Int).Mul(oldTarget, big.NewInt(adjustedTimespan))
-	targetTimeSpan := int64(b.cfg.ChainParams.TargetTimespan /
-		time.Second)
 	newTarget.Div(newTarget, big.NewInt(targetTimeSpan))
 
 	// Limit new value to the proof of work limit.
