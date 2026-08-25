@@ -12,6 +12,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/btcsuite/btcwallet/walletdb"
 	"github.com/lbryio/lbcd/addrmgr"
 	"github.com/lbryio/lbcd/blockchain"
 	"github.com/lbryio/lbcd/chaincfg"
@@ -20,7 +21,6 @@ import (
 	"github.com/lbryio/lbcd/peer"
 	"github.com/lbryio/lbcd/wire"
 	btcutil "github.com/lbryio/lbcutil"
-	"github.com/btcsuite/btcwallet/walletdb"
 	"github.com/realrouse/lbcd-spv/neutrino/banman"
 	"github.com/realrouse/lbcd-spv/neutrino/blockntfns"
 	"github.com/realrouse/lbcd-spv/neutrino/cache/lru"
@@ -956,8 +956,9 @@ func (s *ChainService) BestBlock() (*headerfs.BlockStamp, error) {
 	}
 
 	return &headerfs.BlockStamp{
-		Height: int32(bestHeight),
-		Hash:   bestHeader.BlockHash(),
+		Height:    int32(bestHeight),
+		Hash:      bestHeader.BlockHash(),
+		Timestamp: bestHeader.Timestamp,
 	}, nil
 }
 
