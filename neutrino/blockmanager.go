@@ -2728,11 +2728,14 @@ func (b *blockManager) checkHeaderSanity(blockHeader *wire.BlockHeader,
 	if err != nil {
 		return err
 	}
+	if blockHeader.Bits != diff {
+		return fmt.Errorf("block difficulty of %08x is not the expected value of %08x",
+			blockHeader.Bits, diff)
+	}
 	stubBlock := btcutil.NewBlock(&wire.MsgBlock{
 		Header: *blockHeader,
 	})
-	err = blockchain.CheckProofOfWork(stubBlock,
-		blockchain.CompactToBig(diff))
+	err = blockchain.CheckProofOfWork(stubBlock, b.cfg.ChainParams.PowLimit)
 	if err != nil {
 		return err
 	}
@@ -2794,19 +2797,18 @@ func (b *blockManager) calcNextRequiredDifficulty(newBlockTime time.Time,
 		return lastNode.Header.Bits, nil
 	}
 
-	// Get the block node at the previous retarget (targetTimespan days
-	// worth of blocks). LBC retargets every block, so that is lastNode.
-	firstHeight := lastNode.Height + 1 - b.blocksPerRetarget
-	var firstNode *wire.BlockHeader
-	if firstHeight == lastNode.Height {
-		hdr := lastNode.Header
-		firstNode = &hdr
-	} else {
-		var err error
-		firstNode, err = b.cfg.BlockHeaders.FetchHeaderByHeight(uint32(firstHeight))
-		if err != nil {
-			return 0, fmt.Errorf("header at height %d: %w", firstHeight, err)
-		}
+	// Look back min(interval, lastHeight) like lbcd RelativeAncestor.
+	// Bitcoin's (last+1-interval) is wrong when interval is 1: it selects
+	// lastNode itself, timespan 0, then the next bits are too hard and we
+	// disconnect the peer on the second header.
+	blocksBack := b.blocksPerRetarget
+	if blocksBack > lastNode.Height {
+		blocksBack = lastNode.Height
+	}
+	firstHeight := lastNode.Height - blocksBack
+	firstNode, err := b.cfg.BlockHeaders.FetchHeaderByHeight(uint32(firstHeight))
+	if err != nil {
+		return 0, fmt.Errorf("header at height %d: %w", firstHeight, err)
 	}
 
 	// Limit the amount of adjustment that can occur to the previous

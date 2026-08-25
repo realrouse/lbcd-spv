@@ -261,14 +261,11 @@ func (sp *ServerPeer) OnInv(p *peer.Peer, msg *wire.MsgInv) {
 	newInv := wire.NewMsgInvSizeHint(uint(len(msg.InvList)))
 	for _, invVect := range msg.InvList {
 		if invVect.Type == wire.InvTypeTx {
-			log.Tracef("Ignoring tx %s in inv from %v -- "+
-				"SPV mode", invVect.Hash, sp)
-			if sp.ProtocolVersion() >= wire.BIP0037Version {
-				log.Infof("Peer %v is announcing "+
-					"transactions -- disconnecting", sp)
-				sp.Disconnect()
-				return
-			}
+			// Ignore transaction inventory. Bitcoin Neutrino
+			// disconnects peers that announce txs; with a single
+			// LBC compact-filter peer that would stall sync.
+			log.Tracef("Ignoring tx %s in inv from %v -- SPV mode",
+				invVect.Hash, sp)
 			continue
 		}
 		err := newInv.AddInvVect(invVect)
