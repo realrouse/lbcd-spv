@@ -2798,17 +2798,31 @@ func (b *blockManager) calcNextRequiredDifficulty(newBlockTime time.Time,
 	}
 
 	// Look back min(interval, lastHeight) like lbcd RelativeAncestor.
-	// Bitcoin's (last+1-interval) is wrong when interval is 1: it selects
-	// lastNode itself, timespan 0, then the next bits are too hard and we
-	// disconnect the peer on the second header.
+	// Prefer the in-memory header list: a 2000-header batch is not on disk
+	// yet, so FetchHeaderByHeight(last-1) EOF'd and we disconnected s1.
 	blocksBack := b.blocksPerRetarget
 	if blocksBack > lastNode.Height {
 		blocksBack = lastNode.Height
 	}
 	firstHeight := lastNode.Height - blocksBack
-	firstNode, err := b.cfg.BlockHeaders.FetchHeaderByHeight(uint32(firstHeight))
-	if err != nil {
-		return 0, fmt.Errorf("header at height %d: %w", firstHeight, err)
+	var firstNode *wire.BlockHeader
+	n := lastNode
+	for i := int32(0); i < blocksBack; i++ {
+		if n.Prev() == nil {
+			n = nil
+			break
+		}
+		n = n.Prev()
+	}
+	if n != nil {
+		hdr := n.Header
+		firstNode = &hdr
+	} else {
+		h, err := b.cfg.BlockHeaders.FetchHeaderByHeight(uint32(firstHeight))
+		if err != nil {
+			return 0, fmt.Errorf("header at height %d: %w", firstHeight, err)
+		}
+		firstNode = h
 	}
 
 	// Limit the amount of adjustment that can occur to the previous
